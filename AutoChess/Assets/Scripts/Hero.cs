@@ -6,46 +6,32 @@ using UnityEngine;
 public class Hero : ScriptableObject
 {
     public string Name = "New Hero";
-    public HeroSpecies Species = HeroSpecies.None;
-    public HeroClass Class = HeroClass.None;
+    public HeroShape Shape = HeroShape.None;
+    public HeroColor Color = HeroColor.None;
     public int Price = 0;
-    public Sprite Sprite;
 
     public bool OnBoard { get; set; }
+    public bool OnBench { get; set; }
 }
 
-public enum HeroSpecies
+public enum HeroShape
 {
-    Beast,
-    Demon,
-    Dragon,
-    Dwarf,
-    Elemental,
-    Elf,
-    Goblin,
-    Satyr,
-    Human,
-    Ogre,
-    Orc,
-    Nage,
-    Troll,
-    Undead,
-    God,
+    Cube,
+    Spere,
+    Capsule,
+    Cylinder,
     None
 }
 
-public enum HeroClass
+public enum HeroColor
 {
-    Assassin,
-    DemonHunter,
-    Druid,
-    Knight,
-    Hunter,
-    Priest,
-    Mage,
-    Mech,
-    Shaman,
-    Warlock,
-    Warrior,
+    Red,
+    Green,
+    Blue,
+    Magenta,
+    Yellow,
+    Cyan,
+    Gray,
+    Grey,
     None
 }

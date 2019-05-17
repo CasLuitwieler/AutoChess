@@ -14,8 +14,8 @@ public class InventoryUIManager : MonoBehaviour
 
     private Inventory inventory;
 
-    private List<Hero> benchHeroes;
-    private List<Hero> boardHeroes;
+    private List<GameObject> benchHeroes;
+    private List<GameObject> boardHeroes;
 
     private Text[] benchTexts, boardTexts;
     private GameObject[] benchSlots = null, boardSlots = null;
@@ -94,11 +94,13 @@ public class InventoryUIManager : MonoBehaviour
     {
         for(int i = 0; i < benchHeroes.Count; i++)
         {
-            benchTexts[i].text = benchHeroes[i].Name;
+            Hero hero = benchHeroes[i].GetComponent<HeroProperties>().Hero;
+            benchTexts[i].text = hero.Name;
         }
         for (int i = 0; i < boardHeroes.Count; i++)
         {
-            boardTexts[i].text = boardHeroes[i].Name;
+            Hero hero = boardHeroes[i].GetComponent<HeroProperties>().Hero;
+            boardTexts[i].text = hero.Name;
         }
     }
     

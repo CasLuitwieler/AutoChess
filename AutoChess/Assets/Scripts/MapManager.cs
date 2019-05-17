@@ -6,6 +6,11 @@ public class MapManager : MonoBehaviour
 {
     private Color whiteColor = Color.white, blackColor = Color.black;
 
+    private void OnValidate()
+    {
+        SetTileColors();
+    }
+
     void Start()
     {
         SetTileColors();
@@ -17,7 +22,7 @@ public class MapManager : MonoBehaviour
         int index = 0;
         for (int i = 0; i < meshRenderer.Length; i++)
         {
-            Color tileColor = meshRenderer[i].material.color;
+            Color tileColor = meshRenderer[i].sharedMaterial.color;
             //increment index to start the next row with a differrent color
             if (i % 8 == 0 && i != 0)
                 index++;
@@ -27,7 +32,7 @@ public class MapManager : MonoBehaviour
             else
                 tileColor = blackColor;
 
-            meshRenderer[i].material.color = tileColor;
+            meshRenderer[i].sharedMaterial.color = tileColor;
             index++;
         }
     }

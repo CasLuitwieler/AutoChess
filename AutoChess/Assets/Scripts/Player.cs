@@ -5,12 +5,15 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public Inventory Inventory { get; private set; }
-
+    
     public int Level { get; private set; }
+
+    [SerializeField]
+    private BenchManager benchManager = null;
 
     private void Awake()
     {
-        Inventory = new Inventory(new List<Hero>(), new List<Hero>());
+        Inventory = new Inventory(new List<GameObject>(), new List<GameObject>(), benchManager);
     }
 }
 

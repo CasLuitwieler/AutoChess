@@ -25,11 +25,13 @@ public class ShopUIManager : MonoBehaviour
 
     private void Update()
     {
+        
         if(shopManager.HasChanged)
         {
-            for(int i = 0; i < nameTexts.Length; i++)
+            for (int i = 0; i < nameTexts.Length; i++)
             {
-                nameTexts[i].text = shop.HeroRotation[i].Name;
+                Hero hero = shop.HeroRotation[i].GetComponent<HeroProperties>().Hero;
+                nameTexts[i].text = hero.Name;
             }
             shopManager.HasChanged = false;
         }

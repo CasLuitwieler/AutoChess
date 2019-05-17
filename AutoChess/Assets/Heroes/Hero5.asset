@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51607e9d188e2b84e914cb1a4d2fad13, type: 3}
-  m_Name: Doom
+  m_Name: Hero5
   m_EditorClassIdentifier: 
-  Name: Doom
-  Species: 1
-  Class: 10
-  Price: 4
+  Name: Hero5
+  Shape: 1
+  Color: 1
+  Price: 2
   Sprite: {fileID: 0}

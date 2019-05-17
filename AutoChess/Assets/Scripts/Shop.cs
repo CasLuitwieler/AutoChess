@@ -5,7 +5,7 @@ using UnityEngine;
 public class Shop
 {
     [SerializeField]
-    public Hero[] HeroRotation { get; set; }
+    public GameObject[] HeroRotation { get; set; }
 
     private Inventory inventory;
 
@@ -14,29 +14,32 @@ public class Shop
         this.inventory = inventory;
     }
 
-    public bool BuyHero(Hero hero)
+    public bool BuyHero(GameObject hero)
     {
-        if (inventory.Gold < hero.Price)
+        Hero heroProperties = hero.GetComponent<HeroProperties>().Hero;
+        if (inventory.Gold < heroProperties.Price)
             return false;
 
-        inventory.SubtractGold(hero.Price);
+        inventory.SubtractGold(heroProperties.Price);
         inventory.AddHero(hero);
         return true;
     }
 
-    public bool SellHero(Hero hero)
+    public bool SellHero(GameObject hero)
     {
+        Hero heroProperties = hero.GetComponent<HeroProperties>().Hero;
+
         bool removedSuccesfully = inventory.RemoveHero(hero);
 
         if (removedSuccesfully)
         {
-            inventory.AddGold(hero.Price);
+            inventory.AddGold(heroProperties.Price);
             return true;
         }
         else
         {
             Debug.LogError("Shop couldn't remove hero from inventory");
-            inventory.SubtractGold(hero.Price);
+            inventory.SubtractGold(heroProperties.Price);
             return false;
         }
     }

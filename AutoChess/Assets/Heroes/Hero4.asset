@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51607e9d188e2b84e914cb1a4d2fad13, type: 3}
-  m_Name: BountyHunter
+  m_Name: Hero4
   m_EditorClassIdentifier: 
-  Name: Bounty Hunter
-  Species: 6
-  Class: 0
-  Price: 1
+  Name: Hero4
+  Shape: 1
+  Color: 0
+  Price: 2
   Sprite: {fileID: 0}

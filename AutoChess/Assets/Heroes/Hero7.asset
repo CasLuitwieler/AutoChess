@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51607e9d188e2b84e914cb1a4d2fad13, type: 3}
-  m_Name: ClockWerk
+  m_Name: Hero7
   m_EditorClassIdentifier: 
-  Name: Clockwerk
-  Species: 6
-  Class: 7
-  Price: 1
+  Name: Hero7
+  Shape: 2
+  Color: 0
+  Price: 3
   Sprite: {fileID: 0}
