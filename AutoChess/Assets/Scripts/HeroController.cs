@@ -4,26 +4,37 @@ using UnityEngine;
 
 public class HeroController : MonoBehaviour
 {
-    [SerializeField]
+    public bool OnBoard { get; set; }
+    public int CurrentTile { get; private set; }
+
     private UnitManager unitManager;
+    private BoardManager boardManager;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
+        unitManager = FindObjectOfType<UnitManager>();
+        boardManager = FindObjectOfType<BoardManager>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnTile(int tile)
     {
-        
+        CurrentTile = tile;
     }
+
+    
 
     private void OnMouseOver()
     {
         if(Input.GetKeyDown(KeyCode.Q))
         {
-
+            if(!unitManager.IsMovingHero)
+                unitManager.SetMovingHero(this.gameObject);
+        }
+        if(Input.GetKeyDown(KeyCode.W))
+        {
+            BoardManager newBoardManager = FindObjectOfType<BoardManager>();
+            if (OnBoard)
+                boardManager.PlaceOnBench(this.gameObject);
         }
     }
 }

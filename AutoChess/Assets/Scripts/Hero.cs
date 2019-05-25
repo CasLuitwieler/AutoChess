@@ -9,6 +9,7 @@ public class Hero : ScriptableObject
     public HeroShape Shape = HeroShape.None;
     public HeroColor Color = HeroColor.None;
     public int Price = 0;
+    public int currentTile = -1;
 
     public bool OnBoard { get; set; }
     public bool OnBench { get; set; }

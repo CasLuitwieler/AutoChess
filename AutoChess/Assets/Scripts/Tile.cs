@@ -4,14 +4,25 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public Transform spawn;
+    public bool isBenchTile;
+
+    [SerializeField]
+    private Transform spawn = null;
+
+    [SerializeField]
+    private UnitManager unitManger = null;
 
     public Vector3 spawnPosition { get; private set; }
-
-    public bool tileOccupied { get; set; }
 
     private void Awake()
     {
         spawnPosition = spawn.position;
+        unitManger = FindObjectOfType<UnitManager>();
+    }
+
+    private void OnMouseDown()
+    {
+        if(unitManger.IsMovingHero)
+            unitManger.DropHeroDown(this);
     }
 }

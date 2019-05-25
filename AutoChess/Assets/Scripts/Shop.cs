@@ -21,7 +21,7 @@ public class Shop
             return false;
 
         inventory.SubtractGold(heroProperties.Price);
-        inventory.AddHero(hero);
+        //inventory.AddHero(hero);
         return true;
     }
 

@@ -13,22 +13,10 @@ public class Inventory
     public int amountOfBenchHeroes { get; private set; }
     public int amountOfBoardHeroes { get; private set; }
 
-    private BenchManager benchManager;
-
-    public Inventory(List<GameObject> benchHeroes, List<GameObject> boardHeroes, BenchManager benchManager)
+    public Inventory(List<GameObject> benchHeroes, List<GameObject> boardHeroes)
     {
         this.benchHeroes = benchHeroes;
         this.boardHeroes = boardHeroes;
-        this.benchManager = benchManager;
-    }
-
-    public void AddHero(GameObject hero)
-    {
-        hero.transform.position = benchManager.benchTiles[amountOfBenchHeroes].spawnPosition;
-        benchHeroes.Add(hero);
-
-        amountOfBenchHeroes++;
-        HasChanged = true;
     }
 
     public bool PlaceHeroOnBoard(GameObject hero)

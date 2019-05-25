@@ -8,20 +8,20 @@ public class UnitManager : MonoBehaviour
     public bool IsMovingHero { get; private set; }
 
     [SerializeField]
-    private Image movingHeroImage;
+    private BoardManager boardManager = null;
 
-    private GameObject hero;
+    private GameObject heroBeingMoved;
 
-    public void MovingHero(GameObject hero)
+    public void SetMovingHero(GameObject hero)
     {
         IsMovingHero = true;
-        this.hero = hero;
+        heroBeingMoved = hero;
     }
 
-    public void DropHeroDown(GameObject targetTile)
+    public void DropHeroDown(Tile targetTile)
     {
-        Vector3 newPosition = targetTile.GetComponent<Tile>().spawnPosition;
-        hero.transform.position = newPosition;
+        boardManager.MoveHero(heroBeingMoved, targetTile);
+
         IsMovingHero = false;
     }
 }

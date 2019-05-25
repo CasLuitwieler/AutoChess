@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -9,11 +10,17 @@ public class Player : MonoBehaviour
     public int Level { get; private set; }
 
     [SerializeField]
-    private BenchManager benchManager = null;
+    private Text goldText = null;
 
     private void Awake()
     {
-        Inventory = new Inventory(new List<GameObject>(), new List<GameObject>(), benchManager);
+        Inventory = new Inventory(new List<GameObject>(), new List<GameObject>());
+        Inventory.AddGold(50);
+    }
+
+    private void Update()
+    {
+        goldText.text = "Gold: " + Inventory.Gold.ToString();
     }
 }
 

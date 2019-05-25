@@ -25,7 +25,6 @@ public class ShopUIManager : MonoBehaviour
 
     private void Update()
     {
-        
         if(shopManager.HasChanged)
         {
             for (int i = 0; i < nameTexts.Length; i++)
