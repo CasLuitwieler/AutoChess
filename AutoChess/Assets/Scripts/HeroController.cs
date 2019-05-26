@@ -6,6 +6,7 @@ public class HeroController : MonoBehaviour
 {
     public bool OnBoard { get; set; }
     public int CurrentTile { get; private set; }
+    public int TargetMoveTile { get; private set; }
 
     private UnitManager unitManager;
     private BoardManager boardManager;
@@ -21,7 +22,10 @@ public class HeroController : MonoBehaviour
         CurrentTile = tile;
     }
 
-    
+    public void SetTargetMoveTile(int tile)
+    {
+        TargetMoveTile = tile;
+    }
 
     private void OnMouseOver()
     {
