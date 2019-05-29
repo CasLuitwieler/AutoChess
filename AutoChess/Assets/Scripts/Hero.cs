@@ -1,6 +1,48 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
+public class NewHero : MonoBehaviour
+{
+    [SerializeField] private Team team = Team.None;
+    [SerializeField] private GameObject teamLight = null;
+
+    public Transform Target { get; private set; }
+
+    public Team Team => team;
+    public StateMachine StateMachine => GetComponent<StateMachine>();
+
+
+
+    private void Awake()
+    {
+        InitializeStateMachine();
+    }
+
+    private void InitializeStateMachine()
+    {
+        var states = new Dictionary<Type, BaseState>()
+        {
+            { typeof(MoveState), new MoveState(this)},
+            { typeof(AttackState), new AttackState(this)},
+        };
+
+        GetComponent<StateMachine>().SetStates(states);
+    }
+
+    public void SetTarget(Transform target)
+    {
+        Target = target;
+    }
+}
+
+public enum Team
+{
+    Friendly,
+    Enemy,
+    None
+}
 
 [CreateAssetMenu]
 public class Hero : ScriptableObject
