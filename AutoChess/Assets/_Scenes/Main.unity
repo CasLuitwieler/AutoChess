@@ -2573,7 +2573,8 @@ MonoBehaviour:
   boardManager: {fileID: 2057221473}
   heroPrefab: {fileID: 1900985724844844828, guid: 8f15a9e8b36bfdc4fa1681fb1781eda7,
     type: 3}
-  amountOfEnemies: 2
+  playerTiles: 03000000
+  enemyTiles: 2d00000036000000
 --- !u!4 &476309522
 Transform:
   m_ObjectHideFlags: 0

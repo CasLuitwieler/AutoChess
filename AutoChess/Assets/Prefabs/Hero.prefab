@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 2857255922327457584}
   - component: {fileID: -7755664389177711360}
   - component: {fileID: 6813071686015120409}
+  - component: {fileID: 1004117568942426117}
+  - component: {fileID: 689340484605249065}
   m_Layer: 0
   m_Name: Hero
   m_TagString: Untagged
@@ -75,6 +77,31 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &1004117568942426117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900985724844844828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed1e7a0785146864e9ed26b09a5b8286, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team: 2
+--- !u!114 &689340484605249065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900985724844844828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de6f4393279b05347aeaf0163cd28676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2085656776906353225
 GameObject:
   m_ObjectHideFlags: 0

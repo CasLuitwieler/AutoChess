@@ -10,8 +10,9 @@ public class AttackState : BaseState
 
     }
 
-    public override Type Tick()
+    public override Type Tick(float roundTime)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
+        return null;
     }
 }

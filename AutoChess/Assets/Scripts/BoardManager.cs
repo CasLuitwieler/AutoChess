@@ -168,6 +168,14 @@ public class BoardManager : MonoBehaviour
     {
         return boardHeroes;
     }
+
+    public List<Tile> GetBoardTiles(List<int> selectedTile)
+    {
+        List<Tile> tiles = new List<Tile>();
+        foreach (int tile in selectedTile)
+            tiles.Add(BoardTiles[tile]);
+        return tiles;
+    }
 }
 
 public enum Move

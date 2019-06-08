@@ -10,11 +10,10 @@ public class CombatManager : MonoBehaviour
     [SerializeField]
     private GameObject heroPrefab = null;
 
-    private List<int> playerHeroTiles;
-    private List<int> enemyHeroTiles = new List<int>();
-
-    [SerializeField] private int[] playerTiles;
-    [SerializeField] private int[] enemyTiles;
+    [Range(0, 31)]
+    [SerializeField] private List<int> playerTiles = null;
+    [Range(32, 63)]
+    [SerializeField] private List<int> enemyTiles = null;
 
     private List<NewHero> playerHeroes;
     private List<NewHero> enemyHeroes;
@@ -24,12 +23,15 @@ public class CombatManager : MonoBehaviour
     private float roundTimeCounter;
     private bool cycleStarted = false, cycleEnded = false;
 
+    private RoundState roundState = RoundState.None;
+
     public void SetupCombat()
     {
         ResetCombat();
         CreateHeroes();
 
         roundTimeCounter = 0;
+        roundState = RoundState.Start;
     }
 
     private void ResetCombat()
@@ -37,9 +39,7 @@ public class CombatManager : MonoBehaviour
         ResetCycle();
         playerHeroes = null;
         enemyHeroes = null;
-        heroStateMachines = null;
-        playerHeroTiles = null;
-        enemyHeroTiles = null;
+        heroStateMachines = null;    
     }
 
     private void CreateHeroes()
@@ -47,42 +47,48 @@ public class CombatManager : MonoBehaviour
         playerHeroes = new List<NewHero>();
         enemyHeroes = new List<NewHero>();
         heroStateMachines = new List<StateMachine>();
-        playerHeroTiles = new List<int>();
-        enemyHeroTiles = new List<int>();
 
-        for (int i = 0; i < playerTiles.Length; i++)
+        for (int i = 0; i < playerTiles.Count; i++)
         {
             //get tileNumber
             int tileNumber = playerTiles[i]; //int tileNumber = Random.Range(0, 31);
             //get hero spawnPosition
             Vector3 spawnPos = boardManager.BoardTiles[tileNumber].spawnPosition;
             //create hero
-            playerHeroes[i] = Instantiate(heroPrefab, spawnPos, Quaternion.identity).GetComponent<NewHero>();
+            GameObject newHero = Instantiate(heroPrefab, spawnPos, Quaternion.identity);
+            playerHeroes.Add(newHero.GetComponent<NewHero>());
             //set tileNumber
             playerHeroes[i].SetCurrentTile(tileNumber);
-            playerHeroTiles.Add(tileNumber);
+            //assign team
+            playerHeroes[i].Team = Team.Friendly;
             //add hero to stateMachines
             heroStateMachines.Add(playerHeroes[i].GetComponent<StateMachine>());
         }
-        for (int i = 0; i < enemyTiles.Length; i++)
+        for (int i = 0; i < enemyTiles.Count; i++)
         {
             //get tileNumber
             int tileNumber = enemyTiles[i]; //int tileNumber = Random.Range(32, 63);
             //get hero spawnPosition
             Vector3 spawnPos = boardManager.BoardTiles[tileNumber].spawnPosition;
             //create hero
-            enemyHeroes[i] = Instantiate(heroPrefab, spawnPos, Quaternion.identity).GetComponent<NewHero>();
+            enemyHeroes.Add(Instantiate(heroPrefab, spawnPos, Quaternion.identity).GetComponent<NewHero>());
             //set tileNumber
             enemyHeroes[i].SetCurrentTile(tileNumber);
-            enemyHeroTiles.Add(tileNumber);
+            //assign team
+            enemyHeroes[i].Team = Team.Enemy;
         }
+        foreach (NewHero hero in playerHeroes)
+            hero.SetTiles(boardManager.BoardTiles, enemyTiles);
+        foreach (NewHero hero in enemyHeroes)
+            hero.SetTiles(boardManager.BoardTiles, playerTiles);
     }
 
     private void Update()
     {
         roundTimeCounter += Time.deltaTime;
 
-        UpdateCycle();
+        if(roundState == RoundState.Start)
+            UpdateCycle();
     }
 
     private void UpdateCycle()
@@ -96,7 +102,7 @@ public class CombatManager : MonoBehaviour
         else if (roundTimeCounter <= roundTime / 2)
         {
             foreach (StateMachine stateMachine in heroStateMachines)
-                stateMachine.UpdateCurrentState();
+                stateMachine.UpdateCurrentState(roundTimeCounter / (roundTime/2));
         }
         else if (roundTimeCounter > roundTime / 2 && !cycleEnded)
         {
@@ -111,7 +117,16 @@ public class CombatManager : MonoBehaviour
     private void ResetCycle()
     {
         roundTimeCounter = 0;
-        cycleEnded = false;
+        cycleStarted = false;
         cycleEnded = false;
     }
+}
+
+public enum RoundState
+{
+    Start,
+    Combat,
+    BuyTime,
+    GameOver,
+    None
 }

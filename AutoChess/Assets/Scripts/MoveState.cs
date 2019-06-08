@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class MoveState : BaseState
 {
-    private BoardManager boardManager;
     private NewHero hero;
 
     int xDif, yDif;
@@ -13,26 +12,22 @@ public class MoveState : BaseState
     int distance, distanceSquared;
     int currentTile, targetTile, targetMoveTile;
 
-    float moveSpeed = 0.2f;
-
-    public MoveState(NewHero hero, BoardManager boardManager) : base(hero)
+    public MoveState(NewHero hero) : base(hero)
     {
-        currentTile = hero.CurrentTile;
         this.hero = hero;
-        this.boardManager = boardManager;
     }
 
     public override void CycleStart()
     {
+        currentTile = hero.CurrentTile;
         CalculateMove();
     }
 
-    public override Type Tick()
+    public override Type Tick(float roundTime)
     {
         //lerp to target position
-        transform.position = Vector3.Lerp(transform.position, hero.TargetTiles[targetMoveTile].spawnPosition, Time.time * moveSpeed);
-
-        if (targetTile == currentTile)
+        transform.position = Vector3.Lerp(transform.position, hero.BoardTiles[targetMoveTile].spawnPosition, roundTime);
+        if (currentTile == targetTile)
             return typeof(AttackState);
         return null;
     }
@@ -50,6 +45,11 @@ public class MoveState : BaseState
     
     protected void CalculateMove()
     {
+        if(currentTile == targetTile)
+        {
+            hero.BoardTiles[currentTile].TileState = TileState.Occupied;
+            return;
+        }
         if (!FindTargetTile())
         {
             targetTile = currentTile;
@@ -58,9 +58,8 @@ public class MoveState : BaseState
 
         xDifAbs = Mathf.Abs(xDif);
         yDifAbs = Mathf.Abs(yDif);
-        int difference = Mathf.Abs(xDifAbs - yDifAbs);
 
-        Debug.Log("xDif: " + xDif + "\t yDif: " + yDif + "\t difference: " + difference);
+        //Debug.Log("xDif: " + xDif + "\t yDif: " + yDif + "\t targetTile: " + targetTile);
 
         if (xDifAbs > yDifAbs)
         {
@@ -73,18 +72,10 @@ public class MoveState : BaseState
         else if (xDifAbs == yDifAbs)
         {
             targetMoveTile = currentTile + Mathf.Clamp(xDif, -2, 2) + (Mathf.Clamp(yDif, -2, 2) * 8);
-
-            if (xDifAbs == 0)
-            {
-                Debug.Log("already on target tile, not moving");
-                boardManager.BoardTiles[currentTile].TileState = TileState.Occupied;
-                //heroController.SetTargetMoveTile(currentTile);
-                return;
-            }
         }
-        boardManager.BoardTiles[targetMoveTile].TileState = TileState.Targetted;
+        hero.BoardTiles[targetMoveTile].TileState = TileState.Targetted;
+        hero.BoardTiles[currentTile].TileState = TileState.Available;
         hero.TargetMoveTile = targetMoveTile;
-
         Debug.Log("targetMoveTile: " + targetMoveTile);
     }
 
@@ -92,9 +83,9 @@ public class MoveState : BaseState
     {
         //currentTile = heroController.CurrentTile;
         List<int> remainingTargets = new List<int>();
-        foreach(Tile tile in hero.TargetTiles)
+        foreach(int tile in hero.TargetTiles)
         {
-            remainingTargets.Add(tile.TileNumber);
+            remainingTargets.Add(tile);
         }
 
         while (remainingTargets.Count > 0)
@@ -108,6 +99,7 @@ public class MoveState : BaseState
             else
                 remainingTargets.Remove(targetHeroTile);
         }
+        Debug.Log("No available tile");
         return false;
     }
     
@@ -140,14 +132,16 @@ public class MoveState : BaseState
         //gets all tiles surrounding the targetHeroTile
         GetSurroundingTiles(targetHeroTile, out List<int> surroundingTiles);
 
-        foreach(int tile in surroundingTiles)
+        foreach (int tile in surroundingTiles)
         {
             squaredDistance = CalculateSquaredTileDistance(tile, out int xDifference, out int yDifference);
-            if (squaredDistance <= closestDistance)
+            if (squaredDistance >= closestDistance)
                 continue;
 
             if (TileAvailable(tile, out int availableTile))
+            {
                 closestAvailableTile = availableTile;
+            }
         }
 
         if (closestAvailableTile >= 0)
@@ -200,7 +194,7 @@ public class MoveState : BaseState
     public bool TileAvailable(int targetTile, out int availableTile)
     {
         availableTile = -1;
-        if (!boardManager.BoardTiles[targetTile].isOccupied && !boardManager.BoardTiles[targetTile].isTargetted)
+        if (hero.BoardTiles[targetTile].TileState == TileState.Available)
         {
             availableTile = targetTile;
             return true;

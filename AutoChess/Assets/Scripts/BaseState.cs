@@ -15,6 +15,6 @@ public abstract class BaseState
     }
 
     public virtual void CycleStart() { }
-    public abstract Type Tick();
+    public abstract Type Tick(float roundTime);
     public virtual void CycleEnd() { }
 }

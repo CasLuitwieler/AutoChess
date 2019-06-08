@@ -18,7 +18,10 @@ public class Tile : MonoBehaviour
     
     private void Awake()
     {
-        spawnPosition = spawnPoint.position;
+        if (isBenchTile)
+            spawnPosition = spawnPoint.position;
+        else
+            spawnPosition = transform.position;
         unitManger = FindObjectOfType<UnitManager>();
     }
 

@@ -10,21 +10,18 @@ public class StateMachine : MonoBehaviour
     public BaseState CurrentState { get; private set; }
     public event Action<BaseState> OnStateChange;
 
-    private float roundTime = 5f;
-    private float roundTimeCounter;
-    private bool cycleStarted = false, cycleEnded = false;
-
     public void SetStates(Dictionary<Type, BaseState> states)
     {
         availableStates = states;
+        CurrentState = CurrentState = availableStates[typeof(MoveState)];
     }
 
-    public void UpdateCurrentState()
+    public void UpdateCurrentState(float roundTime)
     {
         if (CurrentState == null)
             CurrentState = availableStates[typeof(MoveState)];
 
-        Type nextState = CurrentState?.Tick();
+        Type nextState = CurrentState?.Tick(roundTime);
 
         if (nextState != null && nextState != CurrentState.GetType())
             SwitchToNewState(nextState);

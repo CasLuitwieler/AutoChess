@@ -136,6 +136,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBenchTile: 1
-  spawn: {fileID: 2564221050512337703}
+  spawnPoint: {fileID: 2564221050512337703}
   unitManger: {fileID: 2178318682587666467, guid: 8c64a96ccb9d3834fb3a51dc34ab3a90,
     type: 3}
