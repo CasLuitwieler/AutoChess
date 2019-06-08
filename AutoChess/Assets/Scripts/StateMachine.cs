@@ -7,22 +7,24 @@ public class StateMachine : MonoBehaviour
 {
     private Dictionary<Type, BaseState> availableStates;
 
-    private Tile testTile;
-
     public BaseState CurrentState { get; private set; }
     public event Action<BaseState> OnStateChange;
+
+    private float roundTime = 5f;
+    private float roundTimeCounter;
+    private bool cycleStarted = false, cycleEnded = false;
 
     public void SetStates(Dictionary<Type, BaseState> states)
     {
         availableStates = states;
     }
 
-    private void Update()
+    public void UpdateCurrentState()
     {
         if (CurrentState == null)
-            CurrentState = availableStates.Values.First();
+            CurrentState = availableStates[typeof(MoveState)];
 
-        var nextState = CurrentState?.Tick();
+        Type nextState = CurrentState?.Tick();
 
         if (nextState != null && nextState != CurrentState.GetType())
             SwitchToNewState(nextState);

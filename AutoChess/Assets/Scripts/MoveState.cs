@@ -6,27 +6,96 @@ using UnityEngine;
 public class MoveState : BaseState
 {
     private BoardManager boardManager;
-    private HeroController heroController;
+    private NewHero hero;
 
     int xDif, yDif;
     int xDifAbs, yDifAbs;
     int distance, distanceSquared;
-    int currentTile, targetTile;
+    int currentTile, targetTile, targetMoveTile;
 
-    public MoveState(NewHero hero) : base(hero)
+    float moveSpeed = 0.2f;
+
+    public MoveState(NewHero hero, BoardManager boardManager) : base(hero)
     {
-        
+        currentTile = hero.CurrentTile;
+        this.hero = hero;
+        this.boardManager = boardManager;
+    }
+
+    public override void CycleStart()
+    {
+        CalculateMove();
     }
 
     public override Type Tick()
     {
-        throw new NotImplementedException();
+        //lerp to target position
+        transform.position = Vector3.Lerp(transform.position, hero.TargetTiles[targetMoveTile].spawnPosition, Time.time * moveSpeed);
+
+        if (targetTile == currentTile)
+            return typeof(AttackState);
+        return null;
     }
 
-    private void CalculateMove(List<int> targetTiles)
+    public override void CycleEnd()
     {
-        currentTile = heroController.CurrentTile;
-        List<int> remainingTargets = targetTiles;
+        //update currentTile
+        currentTile = targetMoveTile;
+        hero.SetCurrentTile(currentTile);
+        //reset tile state
+        //boardManager.BoardTiles[targetMoveTile].TileState = TileState.Targetted;
+        //reset targetMoveTile
+        hero.TargetMoveTile = -1;
+    }
+    
+    protected void CalculateMove()
+    {
+        if (!FindTargetTile())
+        {
+            targetTile = currentTile;
+            return;
+        }
+
+        xDifAbs = Mathf.Abs(xDif);
+        yDifAbs = Mathf.Abs(yDif);
+        int difference = Mathf.Abs(xDifAbs - yDifAbs);
+
+        Debug.Log("xDif: " + xDif + "\t yDif: " + yDif + "\t difference: " + difference);
+
+        if (xDifAbs > yDifAbs)
+        {
+            targetMoveTile = currentTile + Mathf.Clamp(xDif, -3, 3);
+        }
+        else if (xDifAbs < yDifAbs)
+        {
+            targetMoveTile = currentTile + (Mathf.Clamp(yDif, -3, 3) * 8);
+        }
+        else if (xDifAbs == yDifAbs)
+        {
+            targetMoveTile = currentTile + Mathf.Clamp(xDif, -2, 2) + (Mathf.Clamp(yDif, -2, 2) * 8);
+
+            if (xDifAbs == 0)
+            {
+                Debug.Log("already on target tile, not moving");
+                boardManager.BoardTiles[currentTile].TileState = TileState.Occupied;
+                //heroController.SetTargetMoveTile(currentTile);
+                return;
+            }
+        }
+        boardManager.BoardTiles[targetMoveTile].TileState = TileState.Targetted;
+        hero.TargetMoveTile = targetMoveTile;
+
+        Debug.Log("targetMoveTile: " + targetMoveTile);
+    }
+
+    private bool FindTargetTile()
+    {
+        //currentTile = heroController.CurrentTile;
+        List<int> remainingTargets = new List<int>();
+        foreach(Tile tile in hero.TargetTiles)
+        {
+            remainingTargets.Add(tile.TileNumber);
+        }
 
         while (remainingTargets.Count > 0)
         {
@@ -34,50 +103,14 @@ public class MoveState : BaseState
             if (GetClosestAvailableTile(targetHeroTile, out int availableTile))
             {
                 SetNewTarget(availableTile);
-                break;
+                return true;
             }
             else
                 remainingTargets.Remove(targetHeroTile);
         }
-        int targetMoveTile = -1;
-        xDifAbs = Mathf.Abs(xDif);
-        yDifAbs = Mathf.Abs(yDif);
-
-        int difference = Mathf.Abs(xDifAbs - yDifAbs);
-
-        if (xDifAbs > yDifAbs)
-        {
-            if (xDif > 0)
-                targetMoveTile = currentTile + Mathf.Clamp(difference, 0, 3);
-            else
-                targetMoveTile = currentTile - Mathf.Clamp(difference, 0, 3);
-        }
-
-        if (xDifAbs < yDifAbs)
-        {
-            if (yDif > 0)
-                targetMoveTile = currentTile + (Mathf.Clamp(difference, 0, 3) * 8);
-            else if (yDif < 0)
-                targetMoveTile = currentTile - (Mathf.Clamp(difference, 0, 3) * 8);
-        }
-
-        if (xDifAbs == yDifAbs)
-        {
-            targetMoveTile = currentTile + Mathf.Clamp(xDif, -2, 2) + (Mathf.Clamp(yDif, -2, 2) * 8);
-
-            if (xDifAbs == 0)
-            {
-                boardManager.BoardTiles[currentTile].isOccupied = true;
-                heroController.SetTargetMoveTile(currentTile);
-                return;
-            }
-        }
-        boardManager.BoardTiles[targetMoveTile].isTargetted = true;
-        heroController.SetTargetMoveTile(targetMoveTile);
-
-        Debug.Log("targetMoveTile: " + targetMoveTile);
+        return false;
     }
-
+    
     private int GetClosestHeroTile(List<int> targetTiles)
     {
         int targetTile = -1;

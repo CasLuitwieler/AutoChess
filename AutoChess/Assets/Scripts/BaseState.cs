@@ -13,6 +13,8 @@ public abstract class BaseState
         this.gameObject = hero.gameObject;
         this.transform = gameObject.transform;
     }
-    
+
+    public virtual void CycleStart() { }
     public abstract Type Tick();
+    public virtual void CycleEnd() { }
 }

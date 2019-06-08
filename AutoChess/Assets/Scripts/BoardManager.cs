@@ -14,7 +14,16 @@ public class BoardManager : MonoBehaviour
     private GameObject[] boardHeroes = new GameObject[10];
 
     private GameObject[] currentArray, targetArray;
-    
+
+    private void Awake()
+    {
+        //set tile numbers
+        for (int i = 0; i < BenchTiles.Length; i++)
+            BenchTiles[i].TileNumber = i;
+        for (int i = 0; i < BoardTiles.Length; i++)
+            BoardTiles[i].TileNumber = i;
+    }
+
     public void PlaceOnBench(GameObject hero)
     {
         HeroController heroController = hero.GetComponent<HeroController>();
