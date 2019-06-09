@@ -10,11 +10,12 @@ public class NewHero : MonoBehaviour
 
     public Transform Target { get; private set; }
     public Tile[] BoardTiles { get; private set; }
-    public List<int> TargetTiles { get; private set; }
+    public List<NewHero> TargetHeroes { get; private set; }
     public int CurrentTile { get; private set; }
-    public int TargetTile { get; set; }
     public int TargetMoveTile { get; set; }
-
+    public float CycleTime { get; private set; }
+    public float PauseModifier { get; private set; }
+    
     public Team Team = Team.None;
     //public Team Team => team;
     public StateMachine StateMachine { get; private set; }
@@ -23,6 +24,8 @@ public class NewHero : MonoBehaviour
     {
         StateMachine = GetComponent<StateMachine>();
         InitializeStateMachine();
+        CycleTime = 3f;
+        PauseModifier = 1.5f;
     }
 
     private void InitializeStateMachine()
@@ -41,21 +44,33 @@ public class NewHero : MonoBehaviour
         Target = target;
     }
 
+    public void SetTargetHeroes(List<NewHero> targetHeroes)
+    {
+        TargetHeroes = targetHeroes;
+    }
+
     public void SetCurrentTile(int currentTile)
     {
         CurrentTile = currentTile;
     }
 
-    public void SetTiles(Tile[] boardTiles, List<int> targetTiles)
+    public void SetTiles(int currentTile, Tile[] boardTiles)
     {
+        CurrentTile = TargetMoveTile = currentTile;
         BoardTiles = boardTiles;
-        TargetTiles = targetTiles;
+        SetColor();
+    }
+
+    private void SetColor()
+    {
+        if (Team == Team.Player)
+            GetComponentInChildren<MeshRenderer>().material.color = Color.green;
     }
 }
 
 public enum Team
 {
-    Friendly,
+    Player,
     Enemy,
     None
 }

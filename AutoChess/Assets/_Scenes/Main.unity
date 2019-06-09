@@ -2570,11 +2570,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfba97f9ae71e7848921f1877674e0b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardManager: {fileID: 2057221473}
-  heroPrefab: {fileID: 1900985724844844828, guid: 8f15a9e8b36bfdc4fa1681fb1781eda7,
-    type: 3}
   playerTiles: 03000000
-  enemyTiles: 2d00000036000000
+  enemyTiles: 3f000000
 --- !u!4 &476309522
 Transform:
   m_ObjectHideFlags: 0
@@ -6182,6 +6179,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f645d80fbf7e474b896d49738d727a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1201620188
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1201620190}
+  - component: {fileID: 1201620189}
+  m_Layer: 0
+  m_Name: HeroManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1201620189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201620188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ba1d7dc8c05d77428df82b88cdaad00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heroPrefab: {fileID: 1900985724844844828, guid: 8f15a9e8b36bfdc4fa1681fb1781eda7,
+    type: 3}
+  heroContainer: {fileID: 1775437978}
+--- !u!4 &1201620190
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201620188}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1203097338
 GameObject:
   m_ObjectHideFlags: 0
@@ -9344,7 +9387,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1799146975
 GameObject:

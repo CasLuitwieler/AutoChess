@@ -6,13 +6,11 @@ using System;
 public class AttackState : BaseState
 {
     public AttackState(NewHero hero) : base(hero)
-    {
+    { }
 
-    }
-
-    public override Type Tick(float roundTime)
+    public override Type Tick(float cycleProgress)
     {
-        //throw new NotImplementedException();
+        
         return null;
     }
 }

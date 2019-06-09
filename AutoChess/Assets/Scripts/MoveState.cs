@@ -5,28 +5,25 @@ using UnityEngine;
 
 public class MoveState : BaseState
 {
-    private NewHero hero;
-
     int xDif, yDif;
     int xDifAbs, yDifAbs;
     int distance, distanceSquared;
     int currentTile, targetTile, targetMoveTile;
 
     public MoveState(NewHero hero) : base(hero)
-    {
-        this.hero = hero;
-    }
+    { }
 
     public override void CycleStart()
     {
+        targetMoveTile = currentTile;
         currentTile = hero.CurrentTile;
         CalculateMove();
     }
 
-    public override Type Tick(float roundTime)
+    public override Type Tick(float cycleProgress)
     {
         //lerp to target position
-        transform.position = Vector3.Lerp(transform.position, hero.BoardTiles[targetMoveTile].spawnPosition, roundTime);
+        transform.position = Vector3.Lerp(transform.position, hero.BoardTiles[targetMoveTile].spawnPosition, cycleProgress);
         if (currentTile == targetTile)
             return typeof(AttackState);
         return null;
@@ -40,7 +37,7 @@ public class MoveState : BaseState
         //reset tile state
         //boardManager.BoardTiles[targetMoveTile].TileState = TileState.Targetted;
         //reset targetMoveTile
-        hero.TargetMoveTile = -1;
+        //hero.TargetMoveTile = -1;
     }
     
     protected void CalculateMove()
@@ -58,9 +55,21 @@ public class MoveState : BaseState
 
         xDifAbs = Mathf.Abs(xDif);
         yDifAbs = Mathf.Abs(yDif);
-
+        int differrence = Mathf.Abs(xDifAbs - yDifAbs);
         //Debug.Log("xDif: " + xDif + "\t yDif: " + yDif + "\t targetTile: " + targetTile);
-
+        if(differrence > 0)
+        {
+            targetMoveTile = currentTile + Mathf.Clamp(xDif, -2, 2) + (Mathf.Clamp(yDif, -2, 2) * 8);
+        }
+        else if (xDifAbs > yDifAbs)
+        {
+            targetMoveTile = currentTile + Mathf.Clamp(xDif, -3, 3);
+        }
+        else if (xDifAbs < yDifAbs)
+        {
+            targetMoveTile = currentTile + (Mathf.Clamp(yDif, -3, 3) * 8);
+        }
+        /*
         if (xDifAbs > yDifAbs)
         {
             targetMoveTile = currentTile + Mathf.Clamp(xDif, -3, 3);
@@ -73,6 +82,7 @@ public class MoveState : BaseState
         {
             targetMoveTile = currentTile + Mathf.Clamp(xDif, -2, 2) + (Mathf.Clamp(yDif, -2, 2) * 8);
         }
+        */
         hero.BoardTiles[targetMoveTile].TileState = TileState.Targetted;
         hero.BoardTiles[currentTile].TileState = TileState.Available;
         hero.TargetMoveTile = targetMoveTile;
@@ -83,9 +93,9 @@ public class MoveState : BaseState
     {
         //currentTile = heroController.CurrentTile;
         List<int> remainingTargets = new List<int>();
-        foreach(int tile in hero.TargetTiles)
+        foreach(NewHero targetHero in hero.TargetHeroes)
         {
-            remainingTargets.Add(tile);
+            remainingTargets.Add(targetHero.TargetMoveTile);
         }
 
         while (remainingTargets.Count > 0)
@@ -140,6 +150,7 @@ public class MoveState : BaseState
 
             if (TileAvailable(tile, out int availableTile))
             {
+                closestDistance = squaredDistance;
                 closestAvailableTile = availableTile;
             }
         }
@@ -175,20 +186,27 @@ public class MoveState : BaseState
             surroundingTiles.Remove(targetHeroTile + 1); //right tile
             surroundingTiles.Remove(targetHeroTile - 7); //bottom right tile
         }
-        if(targetHeroTile < 7)
+        if(targetHeroTile <= 7)
         {
             //bottom
             surroundingTiles.Remove(targetHeroTile - 9); //bottom left tile
             surroundingTiles.Remove(targetHeroTile - 8); //bottom tile
             surroundingTiles.Remove(targetHeroTile - 7); //bottom right tile
         }
-        if(targetHeroTile > 55)
+        if(targetHeroTile >= 56)
         {
             //top
             surroundingTiles.Remove(targetHeroTile + 7); //top left tile
             surroundingTiles.Remove(targetHeroTile + 8); //top tile
             surroundingTiles.Remove(targetHeroTile + 9); //top right tile
         }
+        if (hero.Team == Team.Player)
+            Debug.Log("player");
+        else
+            Debug.Log("enemy");
+        Debug.Log("targetTile: " + targetHeroTile);
+        foreach (int tile in surroundingTiles)
+            Debug.Log("surrTile: " + tile);
     }
 
     public bool TileAvailable(int targetTile, out int availableTile)
