@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class MoveManager : MonoBehaviour
 {
-    private List<TestHero> playerHeroes;
-    private List<TestHero> enemyHeroes;
+    private List<TestHero> playerHeroes = new List<TestHero>();
+    private List<TestHero> enemyHeroes = new List<TestHero>();
 
-    private List<Node> playerNodes;
-    private List<Node> enemyNodes;
+    private List<Node> playerNodes = new List<Node>();
+    private List<Node> enemyNodes = new List<Node>();
 
     private NodeGrid grid;
 

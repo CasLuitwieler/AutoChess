@@ -7,7 +7,7 @@ public class HeroMover : MonoBehaviour
     public bool IsHeroSelected { get; private set; }
 
     [SerializeField] private Color sellectedHeroColor = Color.black;
-    [SerializeField] private LayerMask layerMask = 0;
+    [SerializeField] private LayerMask layerMask = -1;
 
     private TestHero selectedHero;
 
@@ -37,9 +37,10 @@ public class HeroMover : MonoBehaviour
 
     public void PlaceHero()
     {
+        /*
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 10f, layerMask.value))
+        if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 10f, layerMask))
         {
             //snap hero to grid
             selectedHero.transform.position = hit.transform.position;
@@ -47,5 +48,6 @@ public class HeroMover : MonoBehaviour
             selectedHero.rend.material.color = selectedHero.standardColor;
             IsHeroSelected = false;
         }
+        */
     }
 }

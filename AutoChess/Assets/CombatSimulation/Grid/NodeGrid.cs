@@ -34,8 +34,9 @@ public class NodeGrid : MonoBehaviour
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + NodeRadius) + Vector3.forward * (y * nodeDiameter + NodeRadius);
                 bool walkable = !Physics.CheckSphere(worldPoint, NodeRadius, UnwalkableMask);
-                grid[x, y] = new Node(walkable, worldPoint, x, y);
-                Instantiate(NodeGO, worldPoint, Quaternion.identity, this.transform);
+                Node node = Instantiate(NodeGO, worldPoint, Quaternion.identity, this.transform).GetComponent<Node>();
+                node.Init(walkable, worldPoint, x, y);
+                grid[x, y] = node;                
             }
         }
     }

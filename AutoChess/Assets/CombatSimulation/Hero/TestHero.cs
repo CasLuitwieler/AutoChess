@@ -6,7 +6,7 @@ using System.Linq;
 public class TestHero : MonoBehaviour
 {
     public MeshRenderer rend { get; set; }
-    public Color standardColor { get; private set; }
+    public Color standardColor { get; set; }
 
     private HeroMover gameManager;
     private NodeGrid grid;
@@ -18,15 +18,9 @@ public class TestHero : MonoBehaviour
         grid = FindObjectOfType<NodeGrid>();
     }
 
-    public void SetHeroProperties(Color color)
-    {
-        standardColor = color;
-        rend.material.color = color;
-    }
-
     int currentPos;
     int targetPos;
-    Node targetNode;
+    Node targetNode = null;
     Vector3 targetMovePos;
     bool showDirection = false;
 
@@ -46,7 +40,10 @@ public class TestHero : MonoBehaviour
         {
             List<Node> sortedTargetNodes = SortClosestNode(potentialTargets);
 
+            //check diagonal
+            //check horizontal vertical
             //
+            /*
             if (GetClosestAvailableTile(targetHeroTile, out int availableTile))
             {
                 SetNewTarget(availableTile);
@@ -54,19 +51,20 @@ public class TestHero : MonoBehaviour
             }
             else
                 potentialTargets.Remove(targetHeroNode);
+            */
         }
         return false;
+    }
+
+    private List<Node> GetNeighbourTiles()
+    {
+        return null;
     }
 
     private List<Node> SortClosestNode(List<Node> enemyNodes)
     {
         List<Node> closestNodes = enemyNodes.OrderBy(o => o.DistanceToNode(transform.position)).ToList();
         return closestNodes;
-    }
-
-    private float DistanceToNode(Node node)
-    {
-        return Vector3.Distance(transform.position, node.WorldPosition);
     }
 
     public void Move()

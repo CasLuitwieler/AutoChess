@@ -2,21 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Node
+public class Node : MonoBehaviour
 {
     public bool Walkable;
     public Vector3 WorldPosition;
     public int GridX, GridY;
 
-    public Node()
+    private HeroMover gameManager;
+
+    private void Awake()
     {
-        Walkable = false;
-        WorldPosition = Vector3.zero;
-        GridX = 0;
-        GridY = 0;
+        gameManager = FindObjectOfType<HeroMover>();
     }
 
-    public Node(bool walkable, Vector3 worldPosition, int gridX, int gridY)
+    public void Init(bool walkable, Vector3 worldPosition, int gridX, int gridY)
     {
         Walkable = walkable;
         WorldPosition = worldPosition;
@@ -24,8 +23,18 @@ public class Node
         GridY = gridY;
     }
 
+    public Vector3 GetPosition()
+    {
+        return WorldPosition + new Vector3(0, 1f, 0);
+    }
+
     public float DistanceToNode(Vector3 worldPosition)
     {
         return Vector3.Distance(worldPosition, WorldPosition);
+    }
+
+    private void OnMouseDown()
+    {
+        gameManager.PlaceHero();
     }
 }

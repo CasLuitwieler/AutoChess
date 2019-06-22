@@ -19,20 +19,24 @@ public class HeroCreator : MonoBehaviour
     private void CreateHero(Team team)
     {
         GameObject newHero = null;
-        TestHero hero = null;
 
         if (team == Team.Player)
         {
             newHero = Instantiate(testHero, playerSpawn.position, Quaternion.identity, playerHeroContainer);
-            hero = newHero.GetComponent<TestHero>();
-            hero.SetHeroProperties(Color.green);
+            InitializeHero(newHero, Color.green);
         }
         else if (team == Team.Enemy)
         {
             newHero = Instantiate(testHero, enemySpawn.position, Quaternion.identity, enemyHeroContainer);
-            hero = newHero.GetComponent<TestHero>();
-            hero.SetHeroProperties(Color.red);
+            InitializeHero(newHero, Color.red);
         }
         newHero.layer = 8;
+    }
+
+    private void InitializeHero(GameObject hero, Color color)
+    {
+        TestHero testHero = hero.GetComponent<TestHero>();
+        testHero.standardColor = color;
+        testHero.GetComponentInChildren<MeshRenderer>().material.color = color;
     }
 }
