@@ -2,33 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
-public class TestHero : MonoBehaviour
+public class TestHero
 {
-    public MeshRenderer rend { get; set; }
-    public Color standardColor { get; set; }
+    public Transform transform { get; private set; }
 
-    private HeroMover gameManager;
-    private NodeGrid grid;
+    public Node targetNode = null;
+    private Vector3 targetMovePos;
+    private bool showDirection = false;
 
-    private void Awake()
+    private DebugUI debugLine;
+    
+    public TestHero(Transform transform)
     {
-        rend = GetComponentInChildren<MeshRenderer>();
-        gameManager = FindObjectOfType<HeroMover>();
-        grid = FindObjectOfType<NodeGrid>();
+        this.transform = transform;
+        debugLine = new DebugUI(transform.GetComponent<LineRenderer>());
     }
-
-    int currentPos;
-    int targetPos;
-    Node targetNode = null;
-    Vector3 targetMovePos;
-    bool showDirection = false;
 
     public void CalculateMove(List<Node> enemyNodes)
     {
         FindTargetTile(enemyNodes);
 
-        targetMovePos = targetNode.WorldPosition;
+        //targetMovePos = targetNode.WorldPosition;
+        debugLine.UpdateLines(true);
         showDirection = true;
     }
 
@@ -36,14 +33,22 @@ public class TestHero : MonoBehaviour
     {
         List<Node> potentialTargets = enemyNodes;
 
+        List<Node> sortedTargetNodes = SortClosestNode(potentialTargets);
+        RemoveFarNodes(out float closestDistance, ref sortedTargetNodes);
+
+        foreach (Node node in sortedTargetNodes)
+        {
+            debugLine.AddPoint(node.GetPosition());
+            //if xdiff == ydiff
+                //get diagonal tiles
+            //if xdiff <= 1
+                //get horizontal tiles
+            //if ydiff <= 1
+                //get vertical tiles
+        }
+        /*
         while (potentialTargets.Count > 0)
         {
-            List<Node> sortedTargetNodes = SortClosestNode(potentialTargets);
-
-            //check diagonal
-            //check horizontal vertical
-            //
-            /*
             if (GetClosestAvailableTile(targetHeroTile, out int availableTile))
             {
                 SetNewTarget(availableTile);
@@ -51,14 +56,34 @@ public class TestHero : MonoBehaviour
             }
             else
                 potentialTargets.Remove(targetHeroNode);
-            */
+            
         }
+        */
         return false;
     }
 
-    private List<Node> GetNeighbourTiles()
+    public void DrawLines()
     {
-        return null;
+        /*
+        if (showDirection)
+            debugLine.UpdateLines(true);
+        else
+            debugLine.UpdateLines(false);
+            */
+    }
+
+    private void RemoveFarNodes(out float closestDistance, ref List<Node> sortedTargetNodes)
+    {
+        closestDistance = sortedTargetNodes[0].DistanceToNode(transform.position);
+
+        for (int i = sortedTargetNodes.Count - 1; i >= 0; i--)
+        {
+            Node node = sortedTargetNodes[i];
+            if (node.DistanceToNode(transform.position) - closestDistance <= 5)
+                continue;
+            else
+                sortedTargetNodes.Remove(node);
+        }
     }
 
     private List<Node> SortClosestNode(List<Node> enemyNodes)
@@ -70,6 +95,7 @@ public class TestHero : MonoBehaviour
     public void Move()
     {
         showDirection = false;
+        
         transform.position = targetMovePos;
     }
 
@@ -81,16 +107,5 @@ public class TestHero : MonoBehaviour
             return 0;
         else
             return 1;
-    }
-
-    private void OnMouseDown()
-    {
-        gameManager.SelectHero(this);
-    }
-
-    private void OnDrawGizmos()
-    {
-        if(showDirection)
-            Gizmos.DrawLine(transform.position, targetMovePos);
     }
 }

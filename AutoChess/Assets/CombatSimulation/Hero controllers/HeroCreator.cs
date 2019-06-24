@@ -5,15 +5,19 @@ using UnityEngine.UI;
 
 public class HeroCreator : MonoBehaviour
 {
-    [SerializeField] private GameObject testHero = null;
+    [SerializeField] private GameObject heroGO = null;
     [SerializeField] private Transform playerHeroContainer = null, enemyHeroContainer = null;
     [SerializeField] private Transform playerSpawn = null, enemySpawn = null;
     [SerializeField] private Button spawnPlayerHeroButton = null, spawnEnemyHeroButton = null;
+
+    private MoveManager moveManager;
 
     private void Awake()
     {
         spawnPlayerHeroButton.onClick.AddListener(() => CreateHero(Team.Player));
         spawnEnemyHeroButton.onClick.AddListener(() => CreateHero(Team.Enemy));
+
+        moveManager = FindObjectOfType<MoveManager>();
     }
 
     private void CreateHero(Team team)
@@ -22,21 +26,23 @@ public class HeroCreator : MonoBehaviour
 
         if (team == Team.Player)
         {
-            newHero = Instantiate(testHero, playerSpawn.position, Quaternion.identity, playerHeroContainer);
+            newHero = Instantiate(heroGO, playerSpawn.position, Quaternion.identity, playerHeroContainer);
             InitializeHero(newHero, Color.green);
+            moveManager.playerHeroes.Add(newHero.GetComponent<ClickToMoveEntity>());
         }
         else if (team == Team.Enemy)
         {
-            newHero = Instantiate(testHero, enemySpawn.position, Quaternion.identity, enemyHeroContainer);
+            newHero = Instantiate(heroGO, enemySpawn.position, Quaternion.identity, enemyHeroContainer);
             InitializeHero(newHero, Color.red);
+            moveManager.enemyHeroes.Add(newHero.GetComponent<ClickToMoveEntity>());
         }
         newHero.layer = 8;
     }
 
-    private void InitializeHero(GameObject hero, Color color)
+    private void InitializeHero(GameObject heroGO, Color color)
     {
-        TestHero testHero = hero.GetComponent<TestHero>();
-        testHero.standardColor = color;
-        testHero.GetComponentInChildren<MeshRenderer>().material.color = color;
+        ClickToMoveEntity hero = heroGO.GetComponent<ClickToMoveEntity>();
+        hero.standardColor = color;
+        hero.GetComponentInChildren<MeshRenderer>().material.color = color;
     }
 }

@@ -277,6 +277,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09f0145fa2018504d9df4c77c73738d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerHeroes: []
+  enemyHeroes: []
 --- !u!1 &292178672
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,8 +543,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bf6d8697cce70149b2ea8b600dbab45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testHero: {fileID: 4752080284272876138, guid: 80ebbe5f143fa994094f3708bbf360a1,
-    type: 3}
+  heroGO: {fileID: 1900985724844844828, guid: b1879191306cdc04dafa86f444fce19f, type: 3}
   playerHeroContainer: {fileID: 1921677310}
   enemyHeroContainer: {fileID: 464294755}
   playerSpawn: {fileID: 637867269}
@@ -857,7 +858,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &970187056
 MonoBehaviour:
   m_ObjectHideFlags: 0

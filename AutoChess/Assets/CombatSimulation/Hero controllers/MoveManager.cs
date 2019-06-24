@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MoveManager : MonoBehaviour
 {
-    private List<TestHero> playerHeroes = new List<TestHero>();
-    private List<TestHero> enemyHeroes = new List<TestHero>();
+    public List<ClickToMoveEntity> playerHeroes = new List<ClickToMoveEntity>();
+    public List<ClickToMoveEntity> enemyHeroes = new List<ClickToMoveEntity>();
 
     private List<Node> playerNodes = new List<Node>();
     private List<Node> enemyNodes = new List<Node>();
@@ -22,9 +22,9 @@ public class MoveManager : MonoBehaviour
         UpdateHeroNodes();
 
         //calculate hero move using the opponents hero nodes
-        foreach (TestHero hero in playerHeroes)
+        foreach (ClickToMoveEntity hero in playerHeroes)
             hero.CalculateMove(enemyNodes);
-        foreach (TestHero hero in enemyHeroes)
+        foreach (ClickToMoveEntity hero in enemyHeroes)
             hero.CalculateMove(playerNodes);
     }
 
@@ -35,30 +35,17 @@ public class MoveManager : MonoBehaviour
         enemyNodes.Clear();
 
         //add new nodes
-        foreach (TestHero hero in playerHeroes)
+        foreach (ClickToMoveEntity hero in playerHeroes)
             playerNodes.Add(grid.NodeFromWorldPoint(hero.transform.position));
-        foreach (TestHero hero in enemyHeroes)
+        foreach (ClickToMoveEntity hero in enemyHeroes)
             enemyNodes.Add(grid.NodeFromWorldPoint(hero.transform.position));
     }
 
     public void Move()
     {
-        foreach (TestHero hero in playerHeroes)
+        foreach (ClickToMoveEntity hero in playerHeroes)
             hero.Move();
-        foreach (TestHero hero in enemyHeroes)
+        foreach (ClickToMoveEntity hero in enemyHeroes)
             hero.Move();
-    }
-}
-
-struct HeroTile
-{
-    public int X, Y;
-    public Vector3 WorldPosition;
-
-    public HeroTile(int x, int y, Vector3 worldPosition)
-    {
-        X = x;
-        Y = y;
-        WorldPosition = worldPosition;
     }
 }

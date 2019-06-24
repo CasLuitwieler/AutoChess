@@ -9,7 +9,7 @@ public class HeroMover : MonoBehaviour
     [SerializeField] private Color sellectedHeroColor = Color.black;
     [SerializeField] private LayerMask layerMask = -1;
 
-    private TestHero selectedHero;
+    private ClickToMoveEntity selectedHero;
 
     private void Awake()
     {
@@ -24,8 +24,8 @@ public class HeroMover : MonoBehaviour
             IsHeroSelected = false;
         }
     }
-
-    public void SelectHero(TestHero hero)
+    
+    public void SelectHero(ClickToMoveEntity hero)
     {
         if (IsHeroSelected)
             return;
