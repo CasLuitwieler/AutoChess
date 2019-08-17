@@ -4,17 +4,16 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-public class TestHero
+public class SimulationHero
 {
     public Transform transform { get; private set; }
 
     public Node targetNode = null;
     private Vector3 targetMovePos;
-    private bool showDirection = false;
 
     private DebugUI debugLine;
     
-    public TestHero(Transform transform)
+    public SimulationHero(Transform transform)
     {
         this.transform = transform;
         debugLine = new DebugUI(transform.GetComponent<LineRenderer>());
@@ -24,9 +23,12 @@ public class TestHero
     {
         FindTargetTile(enemyNodes);
 
-        //targetMovePos = targetNode.WorldPosition;
-        debugLine.UpdateLines(true);
-        showDirection = true;
+        debugLine.UpdateLines();
+    }
+
+    public void SetLineActive(bool isSelected)
+    {
+        debugLine.SetActive(isSelected);
     }
 
     private bool FindTargetTile(List<Node> enemyNodes)
@@ -46,6 +48,9 @@ public class TestHero
             //if ydiff <= 1
                 //get vertical tiles
         }
+
+        targetNode = sortedTargetNodes[0];
+
         /*
         while (potentialTargets.Count > 0)
         {
@@ -60,16 +65,6 @@ public class TestHero
         }
         */
         return false;
-    }
-
-    public void DrawLines()
-    {
-        /*
-        if (showDirection)
-            debugLine.UpdateLines(true);
-        else
-            debugLine.UpdateLines(false);
-            */
     }
 
     private void RemoveFarNodes(out float closestDistance, ref List<Node> sortedTargetNodes)
@@ -90,13 +85,6 @@ public class TestHero
     {
         List<Node> closestNodes = enemyNodes.OrderBy(o => o.DistanceToNode(transform.position)).ToList();
         return closestNodes;
-    }
-
-    public void Move()
-    {
-        showDirection = false;
-        
-        transform.position = targetMovePos;
     }
 
     private int CheckDif(int dif)

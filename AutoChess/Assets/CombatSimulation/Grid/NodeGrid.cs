@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class NodeGrid : MonoBehaviour
 {
+    public enum GridType
+    {
+        HexagonGrid,
+        SquareGrid,
+        None
+    }
+
+    public GridType TypeOfGrid = GridType.None;
+
     public LayerMask UnwalkableMask;
     public Vector2 GridWorldSize = new Vector2(8, 8);
     public float NodeRadius = 0.5f;
@@ -13,6 +22,7 @@ public class NodeGrid : MonoBehaviour
     private Node[,] grid;
     private float nodeDiameter;
     private int gridSizeX, gridSizeY;
+    private float tileGap = 0.0f;
 
     private void Start()
     {
@@ -20,7 +30,10 @@ public class NodeGrid : MonoBehaviour
         gridSizeX = Mathf.RoundToInt(GridWorldSize.x / nodeDiameter);
         gridSizeY = Mathf.RoundToInt(GridWorldSize.y / nodeDiameter);
 
-        CreateGrid();
+        if (TypeOfGrid == GridType.SquareGrid)
+            CreateGrid();
+        if (TypeOfGrid == GridType.HexagonGrid)
+            CreateHexagonGrid();
     }
 
     private void CreateGrid()
@@ -32,11 +45,33 @@ public class NodeGrid : MonoBehaviour
         {
             for(int y = 0; y < gridSizeY; y++)
             {
-                Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + NodeRadius) + Vector3.forward * (y * nodeDiameter + NodeRadius);
+                Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + NodeRadius) + Vector3.right * tileGap + Vector3.forward * (y * nodeDiameter + NodeRadius);
                 bool walkable = !Physics.CheckSphere(worldPoint, NodeRadius, UnwalkableMask);
                 Node node = Instantiate(NodeGO, worldPoint, Quaternion.identity, this.transform).GetComponent<Node>();
                 node.Init(walkable, worldPoint, x, y);
                 grid[x, y] = node;                
+            }
+        }
+    }
+
+    private void CreateHexagonGrid()
+    {
+        grid = new Node[gridSizeX, gridSizeY];
+        Vector3 worldBottomLeft = transform.position - Vector3.right * GridWorldSize.x / 2 - Vector3.forward * GridWorldSize.y / 2;
+
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                Vector3 worldPoint;
+                if (y % 2 == 0)
+                    worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + NodeRadius) + Vector3.right * 0.5f + Vector3.forward * (y * nodeDiameter + NodeRadius) * 0.88f;
+                else
+                    worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + NodeRadius) + Vector3.forward * (y * nodeDiameter + NodeRadius) * 0.88f;
+                bool walkable = !Physics.CheckSphere(worldPoint, NodeRadius, UnwalkableMask);
+                Node node = Instantiate(NodeGO, worldPoint, Quaternion.Euler(0, -30f, 0), this.transform).GetComponent<Node>();
+                node.Init(walkable, worldPoint, x, y);
+                grid[x, y] = node;
             }
         }
     }
@@ -113,7 +148,7 @@ public class NodeGrid : MonoBehaviour
         return neighbours;
     }
 
-    public List<Node> GetCornerNeighbours(Node node, Side side)
+    public List<Node> GetSideNeighbours(Node node, Side side)
     {
         List<Node> neighbours = new List<Node>();
         int x = node.GridX;
@@ -154,6 +189,7 @@ public class NodeGrid : MonoBehaviour
         int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
         return grid[x, y];
     }
+    
     
     private void OnDrawGizmos()
     {

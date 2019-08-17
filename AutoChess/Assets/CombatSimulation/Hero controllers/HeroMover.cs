@@ -37,6 +37,13 @@ public class HeroMover : MonoBehaviour
 
     public void PlaceHero()
     {
+        Vector3? newPos = selectedHero.ClickInputReader.GetClickPosition();
+
+        //boxing
+        object position = newPos;
+        //unboxing
+        selectedHero.transform.position = (Vector3)position;
+
         /*
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 

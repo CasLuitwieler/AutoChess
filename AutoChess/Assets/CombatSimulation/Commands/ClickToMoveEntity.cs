@@ -1,24 +1,29 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CommandProcessor))]
 [RequireComponent(typeof(ClickInputReader))]
 [RequireComponent(typeof(LineRenderer))]
-public class ClickToMoveEntity : MonoBehaviour, IEntity
+public class ClickToMoveEntity : MonoBehaviour, IEntity, IClickableEntity
 {
     public MeshRenderer rend { get; set; }
     public Color standardColor { get; set; }
+    public bool IsSelected { get; set; }
 
-    private TestHero hero;
+    private SimulationHero hero;
     private CommandProcessor commandProcessor;
-    private ClickInputReader clickInputReader;    
+    public ClickInputReader ClickInputReader { get; private set; }
 
     private void Awake()
     {
-        hero = new TestHero(transform);
+        hero = new SimulationHero(transform);
         commandProcessor = GetComponent<CommandProcessor>();
-        clickInputReader = GetComponent<ClickInputReader>();
+        ClickInputReader = GetComponent<ClickInputReader>();
+
+        IsSelected = false;
+        IsChanged();
     }
 
     private void Update()
@@ -30,7 +35,7 @@ public class ClickToMoveEntity : MonoBehaviour, IEntity
             commandProcessor.ExecuteCommand(new MoveCommand(this, clickPosition.Value));
             */
         if (Input.GetKeyDown(KeyCode.Backspace))
-            commandProcessor.Undo();        
+            commandProcessor.Undo();
     }
 
     public void CalculateMove(List<Node> enemyNodes)
@@ -51,5 +56,10 @@ public class ClickToMoveEntity : MonoBehaviour, IEntity
     private void OnMouseDown()
     {
         //gameManager.SelectHero(this);
+    }
+
+    public void IsChanged()
+    {
+        hero.SetLineActive(IsSelected);
     }
 }

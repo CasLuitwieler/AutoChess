@@ -27,12 +27,14 @@ public class DebugUI
         line.SetPosition(currentPoint, targetPosition);
     }
 
-    public void UpdateLines(bool heroSelected)
+    public void SetActive(bool isSelected)
     {
-        if (!heroSelected)
-            return;
+        line.enabled = isSelected;
+    }
 
-        line.numPositions = targetPoints.Count * 2;
+    public void UpdateLines()
+    {
+        line.positionCount = targetPoints.Count * 2;
         line.widthMultiplier = 0.2f;
 
         currentPoint = -1;
