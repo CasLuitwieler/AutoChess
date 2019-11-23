@@ -43,31 +43,31 @@ public class HeroProperties : MonoBehaviour
         switch(Hero.Color)
         {
             case HeroColor.Red:
-                rend.material.color = Color.red;
+                rend.material.SetColor("_BaseColor", Color.red);
                 break;
             case HeroColor.Green:
-                rend.material.color = Color.green;
+                rend.material.SetColor("_BaseColor", Color.green);
                 break;
             case HeroColor.Blue:
-                rend.material.color = Color.blue;
+                rend.material.SetColor("_BaseColor", Color.blue);
                 break;
             case HeroColor.Magenta:
-                rend.material.color = Color.magenta;
+                rend.material.SetColor("_BaseColor", Color.magenta);
                 break;
             case HeroColor.Yellow:
-                rend.material.color = Color.yellow;
+                rend.material.SetColor("_BaseColor", Color.yellow);
                 break;
             case HeroColor.Cyan:
-                rend.material.color = Color.cyan;
+                rend.material.SetColor("_BaseColor", Color.cyan);
                 break;
             case HeroColor.Gray:
-                rend.material.color = Color.gray;
+                rend.material.SetColor("_BaseColor", Color.gray);
                 break;
             case HeroColor.Grey:
-                rend.material.color = Color.grey;
+                rend.material.SetColor("_BaseColor", Color.grey);
                 break;
             default:
-                rend.material.color = Color.black;
+                rend.material.SetColor("_BaseColor", Color.black);
                 break;
         }
     }

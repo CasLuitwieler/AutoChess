@@ -15,7 +15,7 @@ public class RoundManager : MonoBehaviour
     private void Awake()
     {
         moveManager = GetComponent<MoveManager>();
-        nextStateButton.onClick.AddListener(() => ChangeState());
+        //nextStateButton.onClick.AddListener(() => ChangeState());
         RoundState = RoundState.None;
     }
 

@@ -31,7 +31,7 @@ public class HeroMover : MonoBehaviour
             return;
 
         selectedHero = hero;
-        hero.rend.material.color = sellectedHeroColor;
+        hero.rend.material.SetColor("_BaseColor", sellectedHeroColor);
         IsHeroSelected = true;
     }
 

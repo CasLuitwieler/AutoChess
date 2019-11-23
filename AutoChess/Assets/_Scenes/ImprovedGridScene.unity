@@ -281,6 +281,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHeroes: []
   enemyHeroes: []
+  calculatePlayerMove: {fileID: 1093747202}
+  movePlayer: {fileID: 1387062065}
+  calculateEnemyMove: {fileID: 1908822699}
+  moveEnemy: {fileID: 1323349323}
 --- !u!114 &42222380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,7 +318,7 @@ MonoBehaviour:
   playerSpawn: {fileID: 637867269}
   enemySpawn: {fileID: 1132535732}
   spawnPlayerHeroButton: {fileID: 1233201111}
-  spawnEnemyHeroButton: {fileID: 0}
+  spawnEnemyHeroButton: {fileID: 1661999569}
 --- !u!1 &292178672
 GameObject:
   m_ObjectHideFlags: 0
@@ -1990,6 +1994,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afecc1a88fa1af04e957b9f96e092e07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TypeOfGrid: 1
   UnwalkableMask:
     serializedVersion: 2
     m_Bits: 256

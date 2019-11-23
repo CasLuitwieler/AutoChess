@@ -43,6 +43,6 @@ public class HeroCreator : MonoBehaviour
     {
         ClickToMoveEntity hero = heroGO.GetComponent<ClickToMoveEntity>();
         hero.standardColor = color;
-        hero.GetComponentInChildren<MeshRenderer>().material.color = color;
+        hero.GetComponentInChildren<MeshRenderer>().material.SetColor("_BaseColor", color);
     }
 }

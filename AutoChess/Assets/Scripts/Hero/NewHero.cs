@@ -64,7 +64,7 @@ public class NewHero : MonoBehaviour
     private void SetColor()
     {
         if (Team == Team.Player)
-            GetComponentInChildren<MeshRenderer>().material.color = Color.green;
+            GetComponentInChildren<MeshRenderer>().material.SetColor("_BaseColor", Color.green);
     }
 }
 

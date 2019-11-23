@@ -27,7 +27,7 @@ public class MapManager : MonoBehaviour
             else
                 tileColor = blackColor;
 
-            meshRenderer[i].material.color = tileColor;
+            meshRenderer[i].material.SetColor("_BaseColor", tileColor);
             index++;
         }
     }
